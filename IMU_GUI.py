@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+#<<<<<<< HEAD
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 # Author : MikeChan
@@ -72,7 +72,7 @@ class IMU_GUI(QWidget):
 
         #===== IMU Layout =====
         self.IMU_Label = QLabel("@ IMU Area @")
-        self.stableCheckBox = QCheckBox(u"即時慢速寫入")
+        self.stableCheckBox = QCheckBox(u"Immediate slow writing")
         h0=QHBoxLayout()
         h0.addWidget(self.IMU_Label)
         h0.addWidget(self.stableCheckBox)
@@ -277,16 +277,16 @@ class IMU_GUI(QWidget):
 
 
     def enable_stable(self):
-        check_stable = QMessageBox.question(self, u'啟動即時寫入', \
-                                            u"此選項將延遲每筆資料速度，並保證資料即時記錄於檔案中，確定嗎？\n    按'Yes'啟動即時檔案寫入，\n    按'NO'取消即時檔案寫入", \
+        check_stable = QMessageBox.question(self, u'Starts instant write', \
+                                            u"Will this option delay every data rate and ensure that the data is immediately recorded in the file？\n    Press 'Yes' to start Instant File Write，\n    Press 'NO' to cancel immediate file writing", \
                                             QMessageBox.Yes | QMessageBox.No)
 
         if check_stable == QMessageBox.Yes:
-            self.statusBrowser.append(u"*IMU即時寫入已啟動")
+            self.statusBrowser.append(u"*Immediate IMU write started")
             self.stableCheckBox.setCheckState(2)
             self.saveButton.setEnabled(False)
         else:
-            self.statusBrowser.append(u"*取消即時寫入")
+            self.statusBrowser.append(u"*Cancel Instant Write")
             self.stableCheckBox.setCheckState(0)
             self.saveButton.setEnabled(True)
 
@@ -596,7 +596,7 @@ class IMU_GUI(QWidget):
 
         #===== IMU Layout =====
         self.IMU_Label = QLabel("@ IMU Area @")
-        self.stableCheckBox = QCheckBox(u"即時慢速寫入")
+        self.stableCheckBox = QCheckBox(u"Immediate slow writing")
         self.stableCheckBox.setChecked(True)
         h0=QHBoxLayout()
         h0.addWidget(self.IMU_Label)
@@ -604,7 +604,7 @@ class IMU_GUI(QWidget):
 
         self.record_sec_le = QLineEdit()
         self.sec_label = QLabel(u'分')
-        self.set_record_sec_btn = QPushButton(u"輸入幾分鐘(0=無限)")
+        self.set_record_sec_btn = QPushButton(u"Enter a few minutes (0 = unlimited)")
         h01 =QHBoxLayout()
         h01.addWidget(self.record_sec_le)
         h01.addWidget(self.sec_label)
@@ -692,7 +692,7 @@ class IMU_GUI(QWidget):
 
     #===== IMU Func. area =====
     def set_record_sec(self):
-      num,ok = QInputDialog.getInt(self,u"預計IMU紀錄時間",u"輸入想要紀錄幾分鐘")
+      num,ok = QInputDialog.getInt(self,u"Estimated IMU record time",u"Enter the number of minutes you want to log")
       if ok:
          self.record_sec_le.setText(str(num))
 
@@ -743,24 +743,24 @@ class IMU_GUI(QWidget):
         #===== end initial ======
 
         countdown_sec = int(self.record_sec_le.text()) *60
-        s = u"預定記錄秒數: %ss" %countdown_sec
+        s = u"The number of seconds to record: %ss" %countdown_sec
         self.statusBrowser.append(s)
 
 
-        #確認 stable checkbox 是否開啟
+        #Verify that the stable checkbox is on
         if self.IMU_KEY and not self.stableCheckBox.isChecked():
             self.tt0 = time.time()
-            self.statusBrowser.append(u"開始紀錄...")
+            self.statusBrowser.append(u"Start recording...")
             self.imu_start_record.start()
 
         elif self.IMU_KEY and self.stableCheckBox.isChecked():
             self.tt0 = time.time()
-            self.statusBrowser.append(u"即時存檔狀態->開始紀錄...")
+            self.statusBrowser.append(u"Immediately archive status -> start recording...")
             self.imu_start_record_stable.start()
 
 
 
-        # 防誤觸鎖鍵
+        # Anti-mis-touch key
         self.startButton.setEnabled(False)
         self.stopButton.setEnabled(True)
         self.saveButton.setEnabled(False)
@@ -787,7 +787,7 @@ class IMU_GUI(QWidget):
         global raw_data
 
         self.duringTime = time.time() - self.tt0
-        self.statusBrowser.append(u"停止紀錄!")
+        self.statusBrowser.append(u"Stop recording!")
         self.statusBrowser.append("During Time: " + "%.2f" %self.duringTime)
 
         if not self.stableCheckBox.isChecked():
@@ -796,7 +796,7 @@ class IMU_GUI(QWidget):
             self.startButton.setEnabled(True)
             self.stopButton.setEnabled(False)
             self.saveButton.setEnabled(True)
-            self.statusBrowser.append(u"=檔案儲存完畢，清除 IMU 連線=")
+            self.statusBrowser.append(u"=Save the file, clear the IMU connection=")
             i2c.write_byte_data(addr, 0x6A, 0x07)
 
         elif self.stableCheckBox.isChecked():
@@ -804,12 +804,12 @@ class IMU_GUI(QWidget):
             self.startButton.setEnabled(True)
             self.stopButton.setEnabled(False)
             self.saveButton.setEnabled(False)
-            self.statusBrowser.append(u"=檔案儲存完畢，清除 IMU 連線=")
+            self.statusBrowser.append(u"=Save the file and clear the IMU connection=")
             i2c.write_byte_data(addr, 0x6A, 0x07)
 
 
     def save(self):
-        self.statusBrowser.append(u"檔案儲存中")
+        self.statusBrowser.append(u"The file is stored")
         time.sleep(0.5)
         self.save_record.start()
         self.startButton.setEnabled(False)
@@ -817,7 +817,7 @@ class IMU_GUI(QWidget):
         self.saveButton.setEnabled(False)
 
     def finished(self):     # will be call when save_record was finished
-        self.statusBrowser.append(u"檔案已儲存，清空記憶體")
+        self.statusBrowser.append(u"The file is saved and the memory is cleared")
         self.statusBrowser.append("===== End Section =====")
         self.saveButton.setEnabled(False)
         self.stopButton.setEnabled(False)
@@ -825,16 +825,16 @@ class IMU_GUI(QWidget):
 
     # show stable checkbox option
     def enable_stable(self):
-        check_stable = QMessageBox.question(self, u'啟動即時寫入', \
-                                            u"此選項將延遲每筆資料速度，並保證資料即時記錄於檔案中，確定嗎？\n    按'Yes'啟動即時檔案寫入，\n    按'NO'取消即時檔案寫入", \
+        check_stable = QMessageBox.question(self, u'Starts instant write', \
+                                            u"This option delays each data rate，And to ensure that data is immediately recorded in the file，Are you sure？\n    Press 'Yes' to start Instant File Write，\n    Press 'NO' to cancel immediate file writing", \
                                             QMessageBox.Yes | QMessageBox.No)
 
         if check_stable == QMessageBox.Yes:
-            self.statusBrowser.append(u"*IMU即時寫入已啟動")
+            self.statusBrowser.append(u"*Immediate IMU write started")
             self.stableCheckBox.setCheckState(2)
             self.saveButton.setEnabled(False)
         else:
-            self.statusBrowser.append(u"*取消即時寫入")
+            self.statusBrowser.append(u"*Cancel Instant Write")
             self.stableCheckBox.setCheckState(0)
             self.saveButton.setEnabled(True)
 
@@ -1062,4 +1062,4 @@ if __name__ == "__main__":
 	IMU_GUI.show()
 	sys.exit(app.exec_())
 
->>>>>>> fd9988560bbd6a0c888dc87011c6b7fc72041855
+#>>>>>>> fd9988560bbd6a0c888dc87011c6b7fc72041855
